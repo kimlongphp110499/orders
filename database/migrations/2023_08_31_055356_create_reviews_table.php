@@ -11,15 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('shipping_statuses', function (Blueprint $table) {
+        Schema::create('reviews', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('order_id');
-            $table->enum('status', config('const.shipping_status'));
-            $table->timestamp('update_time')->useCurrent();
+            $table->integer('rating');
+            $table->text('comment');
             $table->timestamps();
-
-            // Define foreign key constraint
-            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
         });
     }
 
@@ -28,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('shipping_statuses');
+        Schema::dropIfExists('reviews');
     }
 };

@@ -5,13 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ShippingStatus extends Model
+class Review extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'order_id',
-        'status',
-        'update_time',
+        'rating',
+        'comment',
     ];
+    
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
+
 }
