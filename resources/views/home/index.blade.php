@@ -30,6 +30,12 @@
     </nav>
     <div class="container">
        <h1> Welcome, {{ Auth::user()->name }}</h1>
+       @foreach($orders as $order)
+            <li>
+                {{ $order->customer_name }}-
+                <a href="/orders/review/{{ $order->id }}">Reviews and Comments Features</a>
+            </li>
+        @endforeach
     </div>
 </body>
 </html>

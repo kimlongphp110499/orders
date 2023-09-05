@@ -99,7 +99,7 @@ class OrderController extends Controller
         ]);
         $review->save();
     
-        return redirect('/orders');
+        return redirect('/home');
     }
     
 }
