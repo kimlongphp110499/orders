@@ -13,24 +13,17 @@
             <th>Recipient Address</th>
             <th>Shipping Address</th>
             <th>Shipping Date</th>
-            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
         @foreach($orders as $order)
         <tr>
-            <td><a href="/orders/detail/{{ $order->id }}">{{ $order->order_number }}</a></td>
+            <td><a href="/shipping/detail/{{ $order->id }}">{{ $order->order_number }}</a></td>
             <td>{{ $order->customer_name }}</td>
             <td>{{ $order->recipient_address }}</td>
             <td>{{ $order->shipping_address }}</td>
             <td>{{ $order->shipping_date }}</td>
-            <td>
-                <form method="POST" action="{{ route('orders.destroy', [$order->id]) }}">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this order?')">Delete</button>
-                </form>
-            </td>
+          
         </tr>
         @endforeach
     </tbody>

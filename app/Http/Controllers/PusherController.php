@@ -26,4 +26,8 @@ class PusherController extends Controller
     {
         return view('receive', ['message' => $request->get('message')]);
     }
+    public function indexa()
+    {
+        return view('chata');
+    }
 }

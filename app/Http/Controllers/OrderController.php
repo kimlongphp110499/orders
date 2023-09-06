@@ -24,10 +24,22 @@ class OrderController extends Controller
         return view('orders.index', compact('orders'));
     }
 
+    public function shippingId(Request $request, $id)
+    {
+        $orders = Order::where('shipping_id', $id)->get();
+      
+        return view('orders.shipping_list', compact('orders'));
+    }
+
     public function show($id)
     {
         $order = Order::with(['shipping','reviews'])->find($id);
         return view('orders.show', compact('order'));
+    }
+    public function shipping($id)
+    {
+        $order = Order::with(['shipping','reviews'])->find($id);
+        return view('orders.shipping', compact('order'));
     }
 
     public function create()
@@ -81,6 +93,7 @@ class OrderController extends Controller
     
         return back();
     }
+
 
     public function review($id)
     {
