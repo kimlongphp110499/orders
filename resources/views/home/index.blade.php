@@ -7,6 +7,29 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>    <title>Form</title>
 </head>
 <body>
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container">
+          <a class="navbar-brand" href="#">Navbar</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/">Chat</a>
+              </li>
+            </ul>
+            <form action="{{ route('logout') }}" method="POST" class="d-flex" role="search">
+                @csrf
+                @method('DELETE')
+                <button class="btn btn-danger" type="submit">Logout</button>
+            </form>
+          </div>
+        </div>
+    </nav>
     <div class="container mt-5">
         <form id="myForm">
             <div class="mb-3">
@@ -52,37 +75,46 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.5.2/dist/js/bootstrap.min.js"></script>
     <script>
-      //  $(document).ready(function () {
-      //       // Submit form via AJAX
-      //       $("#myForm").submit(function (event) {
-      //           event.preventDefault();
+       $(document).ready(function () {
+            // Submit form via AJAX
+            $('#submitForm').on('click', function (event) {
+            $("#myForm").submit(function (event) {
+                event.preventDefault();
 
-      //           $.get("/sort-link", $(this).serialize(), function (data) {
-      //               $("#responseText").html(data);
-      //               $("#myModal").modal();
-      //           });
-      //       });
-      //   });
-        $(document).ready(function () {
-            $('#submitForm').on('click', function () {
-                // Lấy dữ liệu từ biểu mẫu
-                var formData = $('#myForm').serialize();
-
-                // Gửi AJAX request đến máy chủ
-                $.ajax({
-                    type: 'GET',
-                    url: '/sort-link', // Thay đổi thành URL của máy chủ
-                    data: formData,
-                    success: function (response) {
-                        // Hiển thị phản hồi trong modal
-                        $('#responseMessage').html(response);
-
-                        // Mở modal
-                        $('#myModal').modal('show');
-                    }
+                $.get("/sort-link", $(this).serialize(), function (data) {
+                    $("#responseText").html(data);
+                    $("#myModal").modal();
                 });
             });
         });
+      });
+        // $(document).ready(function () {
+        //     $('#submitForm').on('click', function (event) {
+                // Lấy dữ liệu từ biểu mẫu
+            //     var formData = $('#myForm').serialize();
+
+            //     // Gửi AJAX request đến máy chủ
+            //     $.ajax({
+            //         type: 'GET',
+            //         url: '/sort-link', // Thay đổi thành URL của máy chủ
+            //         data: formData,
+            //         success: function (response) {
+            //             // Hiển thị phản hồi trong modal
+            //             $('#responseMessage').html(response);
+
+            //             // Mở modal
+            //             $('#myModal').modal('show');
+            //         }
+            //     });
+            // });
+        //   event.preventDefault();
+
+        //   $.get("/sort-link", $(this).serialize(), function (data) {
+        //       $("#responseText").html(data);
+        //       $("#myModal").modal();
+        //   });
+        //   });
+        // });
     </script>
 </body>
 </html>

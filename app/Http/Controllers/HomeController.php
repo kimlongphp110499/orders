@@ -3,16 +3,13 @@
 namespace App\Http\Controllers;
  
 use Illuminate\Http\Request;
-use App\Models\Order;
 use Illuminate\Support\Facades\Http;
  
 class HomeController extends Controller
 {
     public function index()
-    {
-        $orders = Order::all();
-      
-        return view('home.index', compact('orders'));
+    {      
+        return view('home.index');
     }
     public function getShortLink(Request $re)
     {
