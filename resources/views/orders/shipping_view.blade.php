@@ -1,42 +1,32 @@
 @extends('layouts.app')
 
 @section('content')
-<h1> Orders</h1>
+<h1>Shippings</h1>
     
 <form action="{{ route('orders.index') }}" class="form-inline my-2 my-lg-0" method="GET">
     <input type="text" class="form-control mr-sm-2" name="search" placeholder="Search...">
     <button type="submit" class="btn btn-primary my-2 my-sm-0">Search</button>
-    <a class="btn btn-primary" href="/orders/create" style="margin-left: 6px;">Create</a>
 </form>
 
-<table class="table">
+<table class="table table-bordered">
     <thead>
         <tr>
-            <th>Order Number</th>
-            <th>Customer Name</th>
-            <th>Recipient Address</th>
-            <th>Shipping Address</th>
-            <th>Shipping Date</th>
-            <th>Expected Delivery Date</th>
+            <th>Shipping Number</th>
+            <th>Shipping Name</th>
             <th>Actions</th>
         </tr>
     </thead>
     <tbody>
         @foreach($orders as $order)
         <tr>
-            <td><a href="/orders/detail/{{ $order->id }}">{{ $order->order_number }}</a></td>
-            <td>{{ $order->customer_name }}</td>
-            <td>{{ $order->recipient_address }}</td>
-            <td>{{ $order->shipping_address }}</td>
-            <td>{{ $order->shipping_date }}</td>
-            <td>{{ $order->expected_delivery_date }}</td>
+            <td><a href="/orders/shipping/{{ $order->id }}">{{ $order->id }}</a></td>
+            <td>{{ $order->name }}</td>
             <td>
                 <form method="POST" action="{{ route('orders.destroy', [$order->id]) }}">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this order?')">Delete</button>
                 </form>
-                <a class="btn btn-primary" href="{{ route('orders.edit', [$order->id]) }}">Update</a>
             </td>
         </tr>
         @endforeach

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\Review;
+use DB;
 use App\Models\ShippingStatus;
 
 class OrderController extends Controller
@@ -17,6 +18,7 @@ class OrderController extends Controller
             $searchTerm = $request->input('search');
             $orders = Order::where('order_number', 'like', "%$searchTerm%")
                         ->orWhere('customer_name', 'like', "%$searchTerm%")
+                        ->orWhere('shipping_address', 'like', "%$searchTerm%")
                         ->orWhere('shipping_date', 'like', "%$searchTerm%")
                         ->get();
         }
@@ -29,6 +31,12 @@ class OrderController extends Controller
         $orders = Order::where('shipping_id', $id)->get();
       
         return view('orders.shipping_list', compact('orders'));
+    }
+    public function shippingView()
+    {
+        $orders =  DB::table('shippings')->get();
+      
+        return view('orders.shipping_view', compact('orders'));
     }
 
     public function show($id)
@@ -57,7 +65,7 @@ class OrderController extends Controller
             'shipping_date' => 'required|date',
             'expected_delivery_date' => 'required|date',
         ]);
-
+        $data['shipping_id'] = 1;
         Order::create($data);
 
         return redirect('/orders');
@@ -114,5 +122,37 @@ class OrderController extends Controller
     
         return redirect('/home');
     }
+    // Trong tệp OrderController.php
+public function edit($id)
+{
+    $order = Order::find($id); // Lấy đối tượng Order cần cập nhật
+    return view('orders.edit', ['order' => $order]);
+}
+
+public function update(Request $request, $id)
+{
+    $data = $request->validate([
+        'order_number' => 'required',
+        'customer_name' => 'required',
+        'recipient_address' => 'required',
+        'shipping_address' => 'required',
+        'shipping_date' => 'required|date',
+        'expected_delivery_date' => 'required|date',
+    ]);
+    $data['shipping_id'] = 1;
+
+    $order = Order::with('shipping')->find($id);
+    $shipping = $order->shipping;
+
+    if ($order) {
+        // If shipping exists, update the status
+        // $shipping->status = $request->input('status');
+        // $shipping->update_time = now();
+        // $shipping->save();
+        $order->fill($data)->save();
+    }
+    return redirect('/orders');
+}
+
     
 }

@@ -1,4 +1,7 @@
-<h1>Shipping Orders</h1>
+@extends('layouts.app')
+
+@section('content')
+<h1>Orders</h1>
     
 <form action="{{ route('orders.index') }}" class="form-inline my-2 my-lg-0" method="GET">
     <input type="text" class="form-control mr-sm-2" name="search" placeholder="Search...">
@@ -28,3 +31,4 @@
         @endforeach
     </tbody>
 </table>
+@endsection

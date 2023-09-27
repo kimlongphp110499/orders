@@ -16,6 +16,7 @@ class Order extends Model
         'recipient_address',
         'shipping_address',
         'shipping_date',
+        'shipping_id',
         'expected_delivery_date',
     ];
 
