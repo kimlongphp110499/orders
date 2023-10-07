@@ -28,15 +28,29 @@ class InvoiceUpdate extends Command
      */
     public function handle()
     {
-        $list = Invoice::take(10)->get();
+        $list = Invoice::take(1)->get();
 
          // Khởi tạo Goutte Client
-         $client = new Client();
+         $proxyList = [
+            'http://104.28.237.72:8080',
+            'http://104.28.237.70:8080',
+            'http://104.28.237.71:8080',
+            'http://104.28.237.72:8080',
+            'http://104.28.205.70:8080',
+            'http://104.28.205.72:8080',
+            'http://104.28.237.72:8080',
+            // Thêm các địa chỉ IP proxy khác nếu cần
+        ];
+    
+        // Khởi tạo Goutte Client
+        $client = new Client();
+        $requestCount = 0; // Đếm số lượng request
+        $num = 0;
          foreach($list as $item){
             // Gửi HTTP request và lấy HTML của trang web
             $slug = Str::slug($item->nbten);
-            
-            $crawler = $client->request('GET', 'https://masothue.com/'.$item->nbmst.'-'.$slug);
+            $currentProxy = $proxyList[$num];
+            $crawler = $client->request('GET', 'https://masothue.com/' . $item->nbmst . '-' . $slug, [], [], ['HTTP_PROXY' => $currentProxy]);
     
             // Xử lý dữ liệu ở đây
             $text = '';
@@ -44,7 +58,10 @@ class InvoiceUpdate extends Command
             if( $filter->count()  > 0) {
                 $text = $filter->text();
             }
+            dd($text);
             if($text) {
+              
+
                 $startPos = strpos($text, 'Tình trạng');
 
                 if ($startPos !== false) {
@@ -67,6 +84,15 @@ class InvoiceUpdate extends Command
                         }
                     }
                 }
+            }
+            $requestCount++;
+            if ($requestCount == 300) {
+                $num++;
+                $requestCount = 0;
+                if($num == count($proxyList)){
+                    $num = 0;
+                }
+                sleep(60);
             }
         }
     }
