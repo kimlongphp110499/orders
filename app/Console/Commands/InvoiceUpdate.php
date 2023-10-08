@@ -28,14 +28,14 @@ class InvoiceUpdate extends Command
      */
     public function handle()
     {
-        $list = Invoice::take(1)->get();
+        $list = Invoice::where('update_trangthai', 0)->get();
 
          // Khởi tạo Goutte Client
          $proxyList = [
-            'http://104.28.237.72:8080',
-            'http://104.28.237.70:8080',
-            'http://104.28.237.71:8080',
-            'http://104.28.237.72:8080',
+            'http://194.15.34.245:8080',
+            'http://194.15.34.245:8081',
+            'http://194.15.34.245:8082',
+            'http://194.15.34.245:8084',
             'http://104.28.205.70:8080',
             'http://104.28.205.72:8080',
             'http://104.28.237.72:8080',
@@ -51,31 +51,27 @@ class InvoiceUpdate extends Command
             $slug = Str::slug($item->nbten);
             $currentProxy = $proxyList[$num];
             $crawler = $client->request('GET', 'https://masothue.com/' . $item->nbmst . '-' . $slug, [], [], ['HTTP_PROXY' => $currentProxy]);
-    
             // Xử lý dữ liệu ở đây
             $text = '';
             $filter = $crawler->filter('table.table-taxinfo');
             if( $filter->count()  > 0) {
                 $text = $filter->text();
             }
-            dd($text);
             if($text) {
               
 
                 $startPos = strpos($text, 'Tình trạng');
-
                 if ($startPos !== false) {
-                    // Tìm vị trí của "Cập nhật mã số thuế" trong chuỗi, bắt đầu từ vị trí của "Tình trạng"
                     $endPos = strpos($text, 'Cập nhật mã số thuế', $startPos);
                     
                     if ($endPos !== false) {
-                        // Lấy phần chuỗi giữa "Tình trạng" và "Cập nhật mã số thuế"
                         $result = trim(substr($text, $startPos + strlen('Tình trạng'), $endPos - $startPos - strlen('Tình trạng')));
                         if($result){
                             $dataToUpdate = [
                                 'trangthai' => $result,
+                                'update_trangthai' => 1,
                             ];
-                        
+                            
                             // Tìm hóa đơn theo ID
                             $invoice = Invoice::find($item->id);
                         
@@ -92,7 +88,7 @@ class InvoiceUpdate extends Command
                 if($num == count($proxyList)){
                     $num = 0;
                 }
-                sleep(60);
+                sleep(10);
             }
         }
     }

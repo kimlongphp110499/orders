@@ -27,6 +27,7 @@ class Invoice extends Model
         'is_delete',
         'hddt_gov',
         'log',
+        'update_trangthai',
     ];
     public $timestamps = false; // Không sử dụng timestamps
 }
